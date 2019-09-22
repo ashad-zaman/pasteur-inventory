@@ -231,8 +231,10 @@ class Challan extends MY_Controller
 			}
 	// edit challan page
 	public function generate_new_challane() {
-	  $pid=$this->input->get('pid');
+	 echo  $pid=$this->input->get('pid');
 	echo $pid=base64_decode($pid);
+	echo $qArray=$this->input->get('qArray');
+	echo $qArray=base64_decode($qArray);
 	exit;
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 

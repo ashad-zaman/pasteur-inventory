@@ -949,7 +949,7 @@ class Purchase extends MY_Controller
 		//print_r($data);
 		$pid=base64_encode($pid);
 		$qArray=base64_encode($qArray);
-		$string="pid=".$pid."?qArray=".$qArray;
+		$string="pid=".$pid."&qArray=".$qArray;
 		echo $string;
 
 	}

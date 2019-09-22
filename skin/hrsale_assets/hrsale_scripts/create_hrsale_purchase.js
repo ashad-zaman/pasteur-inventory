@@ -78,18 +78,24 @@ function update_total() {
 		$("input[class=item_purchase]:checked").each(function () {
 			var value = $(this).val();
 			pId.push(value);
-			alert(value);
+			//alert(value);
 			var quantity=$("#quantity_for_chalane_"+value).val();
+			if(quantity=='' || quantity==0)
+			{
+				alert("Please provide quantity for every selected item");
+			}
+
 			qArray.push(quantity)
-			alert(quantity);
+			//alert(quantity);
 			//alert("value=>" + val);
 		});
-		 jQuery.get(base_url+"/save_items?pid="+pId+"?qArray="+qArray,function(data, status){
+
+		 jQuery.get(base_url+"/save_items?pid="+pId+"&qArray="+qArray,function(data, status){
 			 alert(data);
 			var urlSplit=base_url.split('/');
 			var newBase_url=urlSplit[0]+"//"+urlSplit[1]+"/"+urlSplit[2]+"/"+urlSplit[3]+"/"+urlSplit[4]+"/"+"challan";
 			alert(urlSplit[0]);
-			 window.location.href=newBase_url+'/generate_new_challane'+data;
+			 window.location.href=newBase_url+'/generate_new_challane?'+data;
 		 });
 
 
