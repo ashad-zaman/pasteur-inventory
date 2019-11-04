@@ -87,6 +87,32 @@ class Orders extends MY_Controller
 		}
 	}
 	
+	// create invoice page
+	public function generate_ionice_from_challan() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$data['invoice_order_no'] = $this->Invoices_model->get_invoice_order_no();
+		$data['invoice_order_no']=($data['invoice_order_no']==null)?1000:(1000+$data['invoice_order_no']+1);
+
+		//print_r($data['invoice_order_no']);exit;
+
+		$data['title'] = $this->lang->line('xin_invoice_create').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_invoice_create');
+		$data['all_taxes'] = $this->Tax_model->get_all_taxes();
+		$data['all_items'] = $this->Xin_model->get_items();
+		$data['path_url'] = 'create_hrsale_invoice';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if(in_array('16',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/invoices/generate_invoice_from_challan", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 	
 	// get_invoice_items
 	 public function get_invoice_items() {

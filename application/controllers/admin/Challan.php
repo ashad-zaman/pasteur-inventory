@@ -32,7 +32,7 @@ class Challan extends MY_Controller
      {
           parent::__construct();
           //load the login model
-      $this->load->model('Challan_model');
+      		$this->load->model('Challan_model');
 		  $this->load->model('Xin_model');
 		  $this->load->model("Products_model");
 		  $this->load->model("Tax_model");
@@ -42,6 +42,7 @@ class Challan extends MY_Controller
 		  $this->load->model("Suppliers_model");
 			$this->load->model("Transactions_model");
 			$this->load->model("company_model");
+			$this->load->model('Purchase_model');
      }
 	 
 	// challans page
@@ -231,11 +232,7 @@ class Challan extends MY_Controller
 			}
 	// edit challan page
 	public function generate_new_challane() {
-	 echo  $pid=$this->input->get('pid');
-	echo $pid=base64_decode($pid);
-	echo $qArray=$this->input->get('qArray');
-	echo $qArray=base64_decode($qArray);
-	exit;
+
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -243,66 +240,109 @@ class Challan extends MY_Controller
 		
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		
-		$challan_id = $this->uri->segment(4);
-		$challan_info = $this->Challan_model->read_challan_info($challan_id);
-		if(is_null($challan_info)){
-			redirect('admin/challan');
-		}
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(!in_array('17',$role_resources_ids)) { //edit
-			redirect('admin/challan');
-		}
-		// get project
-		$customer = $this->Customers_model->read_customer_info($challan_info[0]->customer_id); 
-		// get country
-	//	$country = $this->Xin_model->read_country_info($supplier[0]->country_id);
-		// get company info
+
+
+		 $purchase_id=$this->input->get('purchase_id');
+		 $pid=$this->input->get('pid');
+		 $pid=base64_decode($pid);
+		 $qArray=$this->input->get('qArray');
+		 $qArray=base64_decode($qArray);
+
+		$data['pId']=$pid;
+		$data['qarray']=$qArray;
+
+		$data['purchase_id']=$purchase_id;
+		$data['pid']=explode(",",$pid);
+		$data['qArray']=explode(",",$qArray);
+
+		$purchase_info = $this->Purchase_model->read_purchase_info($purchase_id);
 		$company = $this->Xin_model->read_company_setting_info(1);
 		// get company > country info
 		$ccountry = $this->Xin_model->read_country_info($company[0]->country);
-		$data = array(
-			'title' => $this->lang->line('xin_acc_edit_challan').' #'.$challan_info[0]->challan_id,
-			'breadcrumbs' => $this->lang->line('xin_acc_edit_challan'),
-			'path_url' => 'create_hrsale_challan',
-			'challan_id' => $challan_info[0]->challan_id,
-			'prefix' => $challan_info[0]->prefix,
-			'challan_number' => $challan_info[0]->challan_number,
-			'challan_title' => $challan_info[0]->challan_title,
-			'customer_id' => $customer[0]->customer_id,
-			'company_id' => $customer[0]->company_id,
-			'challan_date' => $challan_info[0]->challan_date,
-			'challan_due_date' => $challan_info[0]->challan_due_date,
+
+	
+		$data['challan_order_no'] = $this->Challan_model->get_challan_order_no();
+		$data['challan_order_no']=($data['challan_order_no']==null)?1000:(1000+$data['challan_order_no']+1);
+
+		//print_r($data['purchases_order_no']);exit;
+
+		$data['title'] = $this->lang->line('xin_acc_challanes').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_acc_challanes');
+		//$data['all_taxes'] = $this->Tax_model->get_all_taxes();
+		$data['all_suppliers'] = $this->Suppliers_model->get_suppliers();
+		$data['all_items'] = $this->Xin_model->get_items();
+		//$data['all_payment_methods'] = $this->Xin_model->get_payment_method();
+		$data['path_url'] = 'create_hrsale_challan';
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if(in_array('10',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/challan/generate_challan_from_purchase", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+		
+		// $challan_id = $this->uri->segment(4);
+		// $challan_info = $this->Challan_model->read_challan_info($challan_id);
+		// if(is_null($challan_info)){
+		// 	redirect('admin/challan');
+		// }
+		// $role_resources_ids = $this->Xin_model->user_role_resource();
+		// if(!in_array('17',$role_resources_ids)) { //edit
+		// 	redirect('admin/challan');
+		// }
+		// get project
+	// 	$customer = $this->Customers_model->read_customer_info($challan_info[0]->customer_id); 
+	// 	// get country
+	// //	$country = $this->Xin_model->read_country_info($supplier[0]->country_id);
+	// 	// get company info
+	// 	$company = $this->Xin_model->read_company_setting_info(1);
+	// 	// get company > country info
+	// 	$ccountry = $this->Xin_model->read_country_info($company[0]->country);
+	// 	$data = array(
+	// 		'title' => $this->lang->line('xin_acc_edit_challan').' #'.$challan_info[0]->challan_id,
+	// 		'breadcrumbs' => $this->lang->line('xin_acc_edit_challan'),
+	// 		'path_url' => 'create_hrsale_challan',
+	// 		'challan_id' => $challan_info[0]->challan_id,
+	// 		'prefix' => $challan_info[0]->prefix,
+	// 		'challan_number' => $challan_info[0]->challan_number,
+	// 		'challan_title' => $challan_info[0]->challan_title,
+	// 		'customer_id' => $customer[0]->customer_id,
+	// 		'company_id' => $customer[0]->company_id,
+	// 		'challan_date' => $challan_info[0]->challan_date,
+	// 		'challan_due_date' => $challan_info[0]->challan_due_date,
 
 			
-			'product_total_amount' =>  $challan_info[0]->product_total_amount,
-			'product_total_amount_inc_vat' => $challan_info[0]->product_total_amount_inc_vat,
-			'sub_total_amount' => $challan_info[0]->sub_total_amount,
-			'discount_type' => $challan_info[0]->discount_type,
-			'discount_figure' => $challan_info[0]->discount_figure,
-			'total_tax' => $challan_info[0]->total_tax,
+	// 		'product_total_amount' =>  $challan_info[0]->product_total_amount,
+	// 		'product_total_amount_inc_vat' => $challan_info[0]->product_total_amount_inc_vat,
+	// 		'sub_total_amount' => $challan_info[0]->sub_total_amount,
+	// 		'discount_type' => $challan_info[0]->discount_type,
+	// 		'discount_figure' => $challan_info[0]->discount_figure,
+	// 		'total_tax' => $challan_info[0]->total_tax,
 
 
-			'total_discount' => $challan_info[0]->total_discount,
-			'grand_total' => $challan_info[0]->grand_total,
-			'challan_note' => $challan_info[0]->challan_note,
+	// 		'total_discount' => $challan_info[0]->total_discount,
+	// 		'grand_total' => $challan_info[0]->grand_total,
+	// 		'challan_note' => $challan_info[0]->challan_note,
 
 			
 			
 
-			'all_items' => $this->Xin_model->get_items(),
-			'all_taxes' => $this->Tax_model->get_all_taxes(),
-		//	'product_for_purchase_invoice' => $this->Products_model->product_for_purchase_invoice(),
-		//	'all_taxes' => $this->Products_model->get_taxes()
-			);
-			$role_resources_ids = $this->Xin_model->user_role_resource();
-		//if(in_array('3',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/challan/edit_challan", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load			
-		//} else {
-		//	redirect('admin/dashboard/');
-		//}			  
-		   }	
+	// 		'all_items' => $this->Xin_model->get_items(),
+	// 		'all_taxes' => $this->Tax_model->get_all_taxes(),
+	// 	//	'product_for_purchase_invoice' => $this->Products_model->product_for_purchase_invoice(),
+	// 	//	'all_taxes' => $this->Products_model->get_taxes()
+	// 		);
+	// 		$role_resources_ids = $this->Xin_model->user_role_resource();
+	// 	//if(in_array('3',$role_resources_ids)) {
+	// 		$data['subview'] = $this->load->view("admin/challan/edit_challan", $data, TRUE);
+	// 		$this->load->view('admin/layout/layout_main', $data); //page load			
+	// 	//} else {
+	// 	//	redirect('admin/dashboard/');
+	// 	//}			  
+	 }	
+
+
 		public function mark_as(){
 		 
 		 $id = $this->uri->segment(4);
@@ -614,6 +654,15 @@ class Challan extends MY_Controller
 				 } else {
 					 $cname = '--';	
 				 }
+
+				 $company = $this->company_model->read_company_information($r->company_id); 
+				 if(!is_null($company)){
+					 $company_name = $company[0]->name;
+				 } else {
+					 $company_name = '--';	
+				 }
+
+
 				 $challan_date = '<i class="far fa-calendar-alt position-left"></i> '.$this->Xin_model->set_date_format($r->challan_date);
 				 $challan_due_date = '<i class="far fa-calendar-alt position-left"></i> '.$this->Xin_model->set_date_format($r->challan_due_date);
 				 //invoice_number
@@ -640,8 +689,8 @@ class Challan extends MY_Controller
 							$combhr,
 										 $r->challan_id,
 					 $challan_number,
-										 $cname,
-					 $grand_total,
+										 $company_name.','.$cname,
+					 
 										 $challan_date,
 										 $_status,
 								);
@@ -707,6 +756,7 @@ class Challan extends MY_Controller
 				 
 		 $data = array(
 		 'company_id' => $this->input->post('company_id'),
+		 'purchase_id'=>$this->input->post('purchase_id'),
 		 'customer_id' => $this->input->post('customer_id'),
 		 'challan_number' => $this->input->post('challan_number'),
 		 'challan_title' => $this->input->post('challan_title'),
@@ -811,6 +861,16 @@ class Challan extends MY_Controller
 				 );
 				 //print_r($data2);exit;
 				 $result_item = $this->Challan_model->add_challan_items_record($data2);
+				 $purchase_id=$this->input->post('purchase_id');
+				 $data2 = array(
+					'is_chalane_created' => $iremarks,
+					'quantity_for_chalane' => $qtyhrs,
+					'updated_at' => date('d-m-Y H:i:s')
+					);
+					$result_item = $this->Purchase_model->update_purchase_items_record_by_item($data2,$iname,$purchase_id);
+					
+				
+				 
 				 
 			 $key++; }
 			 $Return['result'] = $this->lang->line('xin_acc_challan_created');

@@ -241,7 +241,7 @@ $lang['xin_challan_delivered'] = 'Sent';
 $lang['xin_challan_on_hold'] = 'On Hold';
 $lang['xin_challan_lost'] = 'Order Pending';
 $lang['xin_challan_dead'] = 'Dead';
-
+$lang['xin_challan_convert_to_invoice'] = 'Convert To Order Invoice';
 
 $lang['xin_acc_mark_as'] = 'Mark As';
 $lang['xin_acc_payment_gateway'] = 'Payment Gateway';
@@ -2480,7 +2480,7 @@ $lang['xin_acc_item'] = 'Item';
 $lang['xin_acc_item_description'] = 'Product Description';
 $lang['xin_acc_item_capacity'] = 'Capacity';
 $lang['xin_acc_item_qtyhrs'] = 'Qty';
-$lang['xin_acc_challane_item_qtyhrs'] = 'Challane Qty';
+$lang['xin_acc_challane_item_qtyhrs'] = 'Challan Qty';
 $lang['xin_acc_remain_item_qtyhrs'] = 'Remain Qty';
 $lang['xin_acc_unit_price'] = 'Unit Price (BDT)';
 $lang['xin_acc_total_amount'] = 'Total (BDT)';

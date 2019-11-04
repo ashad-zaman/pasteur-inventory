@@ -56,7 +56,7 @@ $system = $this->Xin_model->read_setting_info(1);
           <!-- <li><a href="<?php echo site_url('admin/challan/mark_as/'.$challan_id.'/5');?>"><?php echo $this->lang->line('xin_challan_dead');?></a></li> -->
         </ul>
       </div>
-      <!-- <a href="<?php echo site_url('admin/challan/convert_to_invoice/'.$challan_id);?>" class="btn btn-success btn-sm"><i class="fa fa-exchange" aria-hidden="true"></i> <?php echo $this->lang->line('xin_challan_convert_to_invoice');?> </a>  -->
+      <a href="<?php echo site_url('admin/challan/convert_to_invoice/'.$challan_id);?>" class="btn btn-success btn-sm"><i class="fa fa-exchange" aria-hidden="true"></i> <?php echo $this->lang->line('xin_challan_convert_to_invoice');?> </a>
       <a href="<?php echo site_url('admin/challan/preview/'.$challan_id);?>" class="btn btn-flickr btn-sm" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $this->lang->line('xin_acc_inv_preview');?>
       <div class="ripple-wrapper"></div>
       </a> <a href="<?php echo site_url('admin/challan/edit/'.$challan_id);?>" class="btn btn-default btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo $this->lang->line('xin_edit');?></a>
@@ -164,8 +164,8 @@ $system = $this->Xin_model->read_setting_info(1);
                 <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_code');?> </th>
                 <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_item_capacity');?> </th>
                 <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_item_qtyhrs');?> </th>
-                <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_unit_price');?> </th>
-                <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_total_amount');?> </th>
+                <!-- <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_unit_price');?> </th>
+                <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_total_amount');?> </th> -->
                 <th class="py-3" style="text-align:center;font-size:12px;"> <?php echo $this->lang->line('xin_acc_remarks');?> </th>
               </tr>
             </thead>
@@ -184,8 +184,8 @@ $system = $this->Xin_model->read_setting_info(1);
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->code;?></td>
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->capacity;?></td>
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->item_qty;?></td>
-                <td class="py-3" style="text-align:right;padding-right:10px;font-size:12px;"><?php echo $_item->item_unit_price;//echo $this->Xin_model->currency_sign($_item->item_unit_price);?></td>
-                <td class="py-3" style="text-align:right;padding-right:10px;font-size:12px;"><?php echo $_item->item_sub_total;//echo $this->Xin_model->currency_sign($_item->item_sub_total);?></td>
+                <!-- <td class="py-3" style="text-align:right;padding-right:10px;font-size:12px;"><?php echo $_item->item_unit_price;//echo $this->Xin_model->currency_sign($_item->item_unit_price);?></td>
+                <td class="py-3" style="text-align:right;padding-right:10px;font-size:12px;"><?php echo $_item->item_sub_total;//echo $this->Xin_model->currency_sign($_item->item_sub_total);?></td> -->
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->remarks;?></td>
               </tr>
               <?php $i++ ; endforeach;?>

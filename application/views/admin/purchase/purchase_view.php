@@ -29,6 +29,7 @@
     <div class="btn-group pull-right" role="group" style="margin-top:2px"> <a href="<?php echo site_url('admin/purchase/preview/'.$purchase_id);?>" class="btn btn-flickr btn-sm" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $this->lang->line('xin_acc_inv_preview');?>
       <div class="ripple-wrapper"></div>
       </a> <a href="<?php echo site_url('admin/purchase/edit/'.$purchase_id);?>" class="btn btn-default btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo $this->lang->line('xin_edit');?></a>
+      <input type="hidden" name="purchase_id" id="purchase_id" value="<?=$purchase_id;?>" />
       <button type="button" id="print-invoice" class="btn btn-vk btn-sm print-invoice"><i class="fa fa-print" aria-hidden="true"></i> <?php echo $this->lang->line('xin_print');?></button>
     </div>
     </small> 
@@ -116,7 +117,10 @@
               <?php $prod = array(); $i=1; foreach($this->Purchase_model->get_purchase_items($purchase_id) as $_item):?>
               <?php //$result = $this->Products_model->read_product_information($_item->item_id);?>
               <tr>
-                <td><input name="pid[]" class="item_purchase" type="checkbox" value="<?=$_item->purchase_item_id;?>"/></td>
+                <td>
+                <?php if($_item->item_qty-$_item->quantity_for_chalane!=0){?>
+                <input name="pid[]" class="item_purchase" type="checkbox" value="<?=$_item->item_id;?>"/></td>
+                <?php } ?>
                 <td class="py-3"><div class="font-weight-semibold"><?php echo $i;?></div></td>
                 <td class="py-3" style="width:"><div class="font-weight-semibold"><?php echo $_item->item_name;?></div></td>
                 <!-- <td class="py-3"><?php echo $this->Xin_model->currency_sign($_item->item_tax_rate);?></td> -->
@@ -124,8 +128,10 @@
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->capacity;?></td>
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->item_qty;?></td>
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->item_qty-$_item->quantity_for_chalane;?></td>
-                <td class="py-3" style="text-align:center;font-size:12px;"><input type="text" style="width:100px;" name="quantity_for_chalane[<?=$_item->purchase_item_id;?>]" id="quantity_for_chalane_<?=$_item->purchase_item_id;?>" value="<?php //echo $_item->quantity_for_chalane;?>"/></td>
- 
+                <td class="py-3" style="text-align:center;font-size:12px;">
+                <?php if($_item->item_qty-$_item->quantity_for_chalane!=0){?>
+                <input type="text" style="width:100px;" name="quantity_for_chalane[<?=$_item->item_id;?>]" id="quantity_for_chalane_<?=$_item->item_id;?>" value="<?php //echo $_item->quantity_for_chalane;?>"/></td>
+                <?php } ?>
                 <td class="py-3" style="text-align:right;padding-right:10px;font-size:12px;"><?php echo $this->Xin_model->currency_sign($_item->item_unit_price);?></td>
                 <td class="py-3" style="text-align:right;padding-right:10px;font-size:12px;"><?php echo $this->Xin_model->currency_sign($_item->item_sub_total);?></td>
                 <td class="py-3" style="text-align:center;font-size:12px;"><?php echo $_item->remarks;?></td>

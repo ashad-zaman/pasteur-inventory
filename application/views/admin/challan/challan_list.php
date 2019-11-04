@@ -23,8 +23,8 @@
             <th width="100"><?php echo $this->lang->line('xin_action');?></th>
             <th><?php echo $this->lang->line('xin_employees_id');?></th>
             <th><?php echo $this->lang->line('xin_acc_challan_nom');?></th>
-            <th><?php echo $this->lang->line('xin_supplier');?></th>
-            <th><?php echo $this->lang->line('xin_acc_total');?></th>
+            <th><?php echo $this->lang->line('module_company_title');?></th>
+            <!-- <th><?php echo $this->lang->line('xin_acc_total');?></th> -->
             <th><?php echo $this->lang->line('xin_e_details_date');?></th>
             <th><?php echo $this->lang->line('dashboard_xin_status');?></th>
           </tr>

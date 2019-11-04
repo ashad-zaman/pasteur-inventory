@@ -128,5 +128,16 @@ class Purchase_model extends CI_Model {
 			return false;
 		}		
 	}
+
+	// Function to update record in table
+	public function update_purchase_items_record_by_item($data, $id, $purchase_id){
+		$this->db->where('item_id', $id);
+		$this->db->where('purchase_id', $purchase_id);
+		if( $this->db->update('xin_hrsale_purchase_items',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
 }
 ?>

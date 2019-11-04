@@ -75,27 +75,30 @@ function update_total() {
 	jQuery(document).on('click','.createChallan', function () {
 	   var pId=[];
 	   var qArray=[];
+	   var purchase_id=0;
 		$("input[class=item_purchase]:checked").each(function () {
 			var value = $(this).val();
 			pId.push(value);
 			//alert(value);
 			var quantity=$("#quantity_for_chalane_"+value).val();
-			if(quantity=='' || quantity==0)
-			{
-				alert("Please provide quantity for every selected item");
-			}
-
-			qArray.push(quantity)
+			if(quantity!='' && quantity>0)
+				qArray.push(quantity)
 			//alert(quantity);
 			//alert("value=>" + val);
 		});
+		if(qArray.length==0)
+		{
+			alert("Please provide quantity for every selected item");
+			return false;
+		}
 
+		purchase_id=$('#purchase_id').val()
 		 jQuery.get(base_url+"/save_items?pid="+pId+"&qArray="+qArray,function(data, status){
-			 alert(data);
+			 //alert(data);
 			var urlSplit=base_url.split('/');
 			var newBase_url=urlSplit[0]+"//"+urlSplit[1]+"/"+urlSplit[2]+"/"+urlSplit[3]+"/"+urlSplit[4]+"/"+"challan";
-			alert(urlSplit[0]);
-			 window.location.href=newBase_url+'/generate_new_challane?'+data;
+			//alert(urlSplit[0]);
+			 window.location.href=newBase_url+'/generate_new_challane?purchase_id='+purchase_id+"&"+data;
 		 });
 
 
@@ -457,8 +460,8 @@ function generateTax()
 function getQuoteDetails() 
 	{
 		var quoteID=$("select#quote_id").children("option:selected").val();
-			alert("quoteID=>"+quoteID);
-			alert("base_url=>"+base_url);
+			//alert("quoteID=>"+quoteID);
+			//alert("base_url=>"+base_url);
 			window.location.href=base_url+"/convert_quote_purchase?quote_id="+quoteID;
 			// jQuery.get(base_url+"/get_quote_details?quote_id="+quoteID, function(data, status){
 				
